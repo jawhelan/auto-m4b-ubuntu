@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  auto-m4b-ubuntu:
+    build:
+      context: .
+      args:
+        TZ: America/New_York  # Build-time timezone argument
+    image: auto-m4b-ubuntu  # Optional: cleaner image name
+    container_name: auto-m4b-ubuntu  # Optional: custom container name
+    volumes:
+      - ./config:/config
+      - ./temp:/temp
+    environment:
+      TZ: America/New_York
+      PUID: "1003"  # User your PUID and PGID
+      PGID: "100"
+      CPU_CORES: "2"
+      SLEEPTIME: "1m"
+      MAKE_BACKUP: "N"
+    restart: unless-stopped  # Optional: restart policy

@@ -4,60 +4,66 @@ ARG TZ=America/New_York
 ENV TZ=$TZ
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install build dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        tzdata \
-        curl \
-        wget \
-        git \
-        build-essential \
-        cmake \
-        libglib2.0-dev \
-        libtool \
-        pkg-config \
-        ca-certificates \
-        gnupg \
-        ffmpeg \
-        php-cli \
-        php-curl \
-        php-mbstring \
-        php-xml \
-        php-zip && \
+# Install general dependencies + tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tzdata \
+    curl \
+    wget \
+    git \
+    unzip \
+    build-essential \
+    cmake \
+    autoconf \
+    automake \
+    libtool \
+    libglib2.0-dev \
+    pkg-config \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    software-properties-common \
+    ffmpeg && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
-# Build and install libmp4v2 from source
-# Set git to use unauthenticated HTTPS without asking
-# Build and install libmp4v2 from source without git
-RUN curl -L https://github.com/enzo1982/libmp4v2/archive/refs/heads/master.zip -o /tmp/libmp4v2.zip && \
-    apt-get install -y unzip && \
-    unzip /tmp/libmp4v2.zip -d /tmp && \
+# Install PHP 8.2 from Sury PPA
+RUN add-apt-repository ppa:ondrej/php -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    php8.2-cli \
+    php8.2-curl \
+    php8.2-mbstring \
+    php8.2-xml \
+    php8.2-zip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Build and install libmp4v2 from sergiomb2
+RUN curl -L https://github.com/sergiomb2/libmp4v2/archive/refs/heads/master.zip -o /tmp/libmp4v2.zip && \
+    unzip -o /tmp/libmp4v2.zip -d /tmp && \
     cd /tmp/libmp4v2-master && \
-    mkdir -p build && cd build && \
-    cmake .. && \
+    mkdir -p m4 && \
+    autoreconf -i && \
+    ./configure CXXFLAGS="-Wno-narrowing" && \
     make -j$(nproc) && \
     make install && \
     ldconfig && \
     rm -rf /tmp/libmp4v2*
 
-
-
-# Install m4b-tool binary
+# Add m4b-tool
 COPY m4b-tool.phar /usr/local/bin/m4b-tool
 RUN chmod +x /usr/local/bin/m4b-tool
 
-# Bind volumes
+# Optional bind volumes
 VOLUME /config
 VOLUME /temp
 
-# Optional runtime envs
+# Optional envs for runtime customization
 ENV PUID=""
 ENV PGID=""
 ENV CPU_CORES=""
 ENV SLEEPTIME=""
 
-LABEL Description="m4b-tool container with PHP 8.x and libmp4v2 from source"
+LABEL Description="m4b-tool container with PHP 8.2 and libmp4v2 built from source"
 
 CMD ["sleep", "infinity"]

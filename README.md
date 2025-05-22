@@ -70,14 +70,11 @@ docker compose build
 ```bash
 docker compose up -d
 ```
-
 ---
-
 
 # 🎧 Batch M4B Audiobook Builder
 
 This project simplifies the conversion of folders of MP3 files into chaptered `.m4b` audiobooks with embedded metadata and optional cover art. It runs inside a containerized environment for reliability and portability.
-
 ---
 
 ## ⚙️ Main Script: `batch-m4b-builder.sh`
@@ -92,7 +89,6 @@ This project simplifies the conversion of folders of MP3 files into chaptered `.
 - MP3 files named in chapter order 
 - Optional: `cover.jpg` in the same folder (if not mb4-tool will auto extract from mp3)
 
-
 ### 🖥️🏃 Usage (inside container)
 ```bash
 docker exec -it auto-m4b-ubuntu /config/batch-m4b-builder.sh
@@ -103,7 +99,6 @@ docker exec -it auto-m4b-ubuntu bash
 /config/batch-m4b-builder.sh
 ```
 ---
-
 ## ⚙️ Alternate Builders
 
 ### ⚙️ `file-m4b-builder.sh` — Use Full Filename as Chapter Title
@@ -113,7 +108,6 @@ docker exec -it auto-m4b-ubuntu bash
 ```bash
 docker exec -it auto-m4b-ubuntu /config/file-m4b-builder.sh
 ```
-
 ---
 
 ### ⚙️ `track-m4b-builder.sh` — Use “Track - Chapter” Style
@@ -123,7 +117,6 @@ docker exec -it auto-m4b-ubuntu /config/file-m4b-builder.sh
 ```bash
 docker exec -it auto-m4b-ubuntu /config/track-m4b-builder.sh
 ```
-
 ## 📝 Batch M4B Builder Notes
 
 - Each `.m4b` file includes:
@@ -133,7 +126,6 @@ docker exec -it auto-m4b-ubuntu /config/track-m4b-builder.sh
 - A `.done` file is created inside each folder to prevent repeated processing. Delete it to reprocess.
 
 ---
-
 
 ## 📦 `m4b-tool` (m4b-tool.phar)
 
@@ -162,7 +154,6 @@ Set up a structure like this
        │    └── ...
        └── output
 ```
-
 
 📦 Basic Merge
 

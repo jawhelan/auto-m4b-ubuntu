@@ -1,0 +1,30 @@
+# Ignore Git & editor files
+.git
+.gitignore
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignore build artifacts
+*.m4b
+*.mp3
+*.log
+
+# Ignore local folders not needed in the image
+temp/
+output/
+input/
+untagged/
+test/
+samples/
+examples/
+backup/
+
+# Ignore OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore Docker files not needed in image
+.dockerignore
+docker-compose.override.yml

@@ -47,8 +47,7 @@ for DIR in /temp/*/; do
   rm -rf "$CHAPTER_TMP"/*
   INDEX=1
   for FILE in "${FILES[@]}"; do
-    cp "$FILE" "$CHAPTER_TMP/Chapter_$INDEX.mp3"
-
+    cp "$FILE" "$CHAPTER_TMP/$(printf "%03d_Chapter_%d.mp3" $INDEX $INDEX)"
     ((INDEX++))
   done
 

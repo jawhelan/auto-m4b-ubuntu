@@ -1,126 +1,215 @@
-# 📁 FileNameToFolder
 
-Organize your audiobook files by grouping matching `.pdf` and audio files (`.mp3` or `.m4b`) into clean, structured folders.
+# auto-m4b-ubuntu
 
----
+This project builds and runs a custom Docker container named auto-m4b-ubuntu, designed to convert MP3 audiobook files into .m4b format with embedded chapters and metadata, using the open-source tool m4b-tool. It is tailored for single-track M4B output with unified metadata.
 
-## ✅ What It Does
+The environment is optimized for batch processing of audiobooks and can be extended or automated with wrapper scripts. It uses an Ubuntu-based image, preconfigured with:
 
-For each matching **base filename** (case-insensitive), the tool:
+`m4b-tool` (m4b-tool.phar) (installed via PHP 8.2 .phar and/or apt)
 
-- 📂 Creates a folder named after the base filename  
-- 📥 Moves the `.pdf` and `.mp3` or `.m4b` files into that folder  
-- 🚫 Skips any unmatched (solo) `.pdf`, `.mp3`, or `.m4b` files  
-- 📝 Logs all actions to `FileNameToFolder.log`
+`ffmpeg` for media processing
 
----
+`eyeD3` for MP3 metadata extraction
 
-## 📂 Example Input
+## 🐳 Docker Image Details
+**Base Image**: ubuntu:latest
 
+**Installed Tools:**
+
+- m4b-tool (via m4b-tool.phar)
+
+- ffmpeg
+
+- eyeD3
+**Volumes:**
+/temp
+/config
+
+## 📝 `docker-compose.yml`
+```yaml
+version: '3.7'  
+
+services:
+  auto-m4b-ubuntu:
+    build:
+      context: .
+      args:
+        TZ: America/New_York  # Use your own timezone
+    image: auto-m4b-ubuntu  
+    container_name: auto-m4b-ubuntu  
+    volumes:
+      - ./config:/config
+      - ./temp:/temp
+    environment:
+      TZ: America/New_York  # Use your own timezone
+      PUID: "1000"  # Use your own PUID and PGID
+      PGID: "1000"
+      CPU_CORES: "2"
+      SLEEPTIME: "1m"
+      MAKE_BACKUP: "N"
+    restart: unless-stopped  
 ```
-P:\Library\Audiobooks\
-├── Book One.pdf
-├── Book One.mp3
-├── Book Two.pdf
-├── Book Two.m4b
-├── SoloFile.mp3
-└── OrphanNote.pdf
+
+## 📂 Folder Layout (example)
+```
+/temp/
+└── Book Title/
+    ├── 0001 - Chapter One.mp3
+    ├── 0002 - Chapter Two.mp3
+    ├── cover.jpg
 ```
 
----
 
-## 📦 Example Output
 
-```
-P:\Library\Audiobooks\
-├── Book One\
-│   ├── Book One.pdf
-│   └── Book One.mp3
-├── Book Two\
-│   ├── Book Two.pdf
-│   └── Book Two.m4b
-├── SoloFile.mp3         ← skipped
-└── OrphanNote.pdf       ← skipped
+## 🔧 Build the image 
+```bash
+docker compose build
 ```
 
----
-
-## 🛠 Requirements
-
-- Windows 10/11  
-- PowerShell (built-in) 
-   
-- Files stored in a **flat folder** (not inside subfolders)  
-- Both `.ps1` and `.bat` files in the same folder
-
----
-
-## ⚙️ How to Use
-
-1. Place `FileNameToFolder.ps1` and `FileNameToFolder.bat` in the same folder.
-2. Open `FileNameToFolder.bat` in a text editor and update this line to point to your files:
-
-   ```
-   set "targetFolder=P:\Library\Audiobooks"
-   ```
-
-3. Double-click the `.bat` file to run the script.
-
----
-
-## 📄 FileNameToFolder.bat
-
-```
-@echo off
-setlocal
-
-set "targetFolder=P:\Library\Audiobooks"
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0FileNameToFolder.ps1" "%targetFolder%"
-
-pause
+## 🚀 Launch container
+```bash
+docker compose up -d
 ```
 
 ---
 
-## 💡 Script Behavior
 
-- Folders are only created for files that share a base name and include both:
-  - a `.pdf` and  
-  - either a `.mp3` or `.m4b`
-- Automatically truncates overly long folder or file names to prevent path errors
-- Skips any file that does not have a valid pairing
-- Generates a log file at `FileNameToFolder.log` with move and warning info
+# 🎧 Batch M4B Audiobook Builder
+
+This project simplifies the conversion of folders of MP3 files into chaptered `.m4b` audiobooks with embedded metadata and optional cover art. It runs inside a containerized environment for reliability and portability.
 
 ---
 
-## 📜 Sample Log Output
+## ⚙️ Main Script: `batch-m4b-builder.sh`
 
+**Creates:**  
+- A single-track `.m4b` audiobook  
+- Clean chapter markers named `Chapter 1`, `Chapter 2`, etc.  
+- Proper metadata: title, artist, album, year, genre, comment  
+- A `.done` marker to prevent duplicate processing  
+
+### ✅ Requirements:
+- MP3 files named in chapter order 
+- Optional: `cover.jpg` in the same folder (if not mb4-tool will auto extract from mp3)
+
+
+### 🖥️🏃 Usage (inside container)
+```bash
+docker exec -it auto-m4b-ubuntu /config/batch-m4b-builder.sh
 ```
-Processing folder: P:\Library\Audiobooks
+### 🐚🏃 Usage (inside container)
+```bash
+docker exec -it auto-m4b-ubuntu bash  
+/config/batch-m4b-builder.sh
+```
+---
 
-Creating folder: P:\Library\Audiobooks\Book One
-Moved: Book One.pdf => P:\Library\Audiobooks\Book One
-Moved: Book One.mp3 => P:\Library\Audiobooks\Book One
+## ⚙️ Alternate Builders
 
-Creating folder: P:\Library\Audiobooks\Book Two
-Moved: Book Two.pdf => P:\Library\Audiobooks\Book Two
-Moved: Book Two.m4b => P:\Library\Audiobooks\Book Two
+### ⚙️ `file-m4b-builder.sh` — Use Full Filename as Chapter Title
+- Chapters are named from the full filename
+- Suitable for podcasts or complex filenames
 
-✅ Finished at 2025-05-21 17:45:12
+```bash
+docker exec -it auto-m4b-ubuntu /config/file-m4b-builder.sh
 ```
 
 ---
 
-## ❓ Troubleshooting
+### ⚙️ `track-m4b-builder.sh` — Use “Track - Chapter” Style
+- Each MP3 becomes a separate chapter named like `001_Chapter_1`
+- Good for advanced players and debug
 
-**param not recognized**  
-You're trying to run the `.ps1` script directly. Always use the `.bat` file to launch the script.
+```bash
+docker exec -it auto-m4b-ubuntu /config/track-m4b-builder.sh
+```
 
-**Nothing is moved**  
-Make sure each `.pdf` has a matching `.mp3` or `.m4b` file with the same base name.
+## 📝 Batch M4B Builder Notes
+
+- Each `.m4b` file includes:
+  - Chapter metadata
+  - Embedded tags
+  - Optional cover image
+- A `.done` file is created inside each folder to prevent repeated processing. Delete it to reprocess.
 
 ---
 
-## 🏁 License
 
-This script is free to use, modify, and distribute. No attribution required.
+## 📦 `m4b-tool` (m4b-tool.phar)
+
+These are pre-installed in the Docker image.
+
+### 📚 m4b-tool Overview & Usage Guide
+
+#### 🧰 What is `m4b-tool`?
+
+`m4b-tool` is a powerful command-line utility designed to create and manage `.m4b` audiobook files. It can merge, extract and inject chapter data, convert formats, and tag audiobooks with detailed metadata.
+
+#### 📁 Set up working directories
+To run manually first set up the working directories
+```bash
+mkdir -p temp/input temp/output
+```
+
+📁 File Organization Tip  
+Set up a structure like this
+```
+
+   ── temp
+       ├── input
+       │    ├── 01.mp3
+       │    ├── 02.mp3
+       │    └── ...
+       └── output
+```
+
+
+📦 Basic Merge
+
+```bash
+php m4b-tool.phar merge temp/input --output-file temp/output/book.m4b
+```
+
+🖼 With Metadata & Cover Art
+```bash
+php m4b-tool.phar merge temp/input \
+  --output-file temp/output/book.m4b \
+  --name "My Audiobook Title" \
+  --author "Author Name" \
+  --album "Audiobook Album" \
+  --cover cover.jpg
+```
+🔇 Automatically Generate Chapters by Silence
+```bash
+php m4b-tool.phar merge temp/input \
+  --output-file temp/output/book.m4b \
+  --silence \
+  --max-chapter-length 900
+```
+⏩ Speed Up Conversion (multi-core)
+```bash
+php m4b-tool.phar merge temp/input \
+  --output-file temp/output/book.m4b \
+  --jobs 4
+```
+Adjust --jobs to match your CPU core count.  
+🔍 Full List of Options
+```bash
+php m4b-tool.phar help
+```
+
+---
+
+## 💬 Credits
+
+- 🛠 `m4b-tool`: [Andreas (sandreas)](https://github.com/sandreas)
+- 🔧 `libmp4v2` source: [Sérgio Basto](https://github.com/sergiomb2/libmp4v2)
+
+---
+
+## 📬 Feedback
+Pull requests and improvements welcome!
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

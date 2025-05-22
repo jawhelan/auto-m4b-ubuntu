@@ -50,8 +50,7 @@ services:
     restart: unless-stopped  
 ```
 
-## 📂 Folder Layout (example)  
-### Volumes
+## 📂 Volumes
 ```
 /Temp
 /config

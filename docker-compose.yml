@@ -2,20 +2,17 @@ version: '3.7'
 
 services:
   auto-m4b-ubuntu:
-    build:
-      context: .
-      args:
-        TZ: America/New_York  # Use your own timezone
-    image: auto-m4b-ubuntu  
-    container_name: auto-m4b-ubuntu  
+    image: jawhelan/auto-m4b-ubuntu
+    container_name: auto-m4b-ubuntu
     volumes:
       - ./config:/config
       - ./temp:/temp
     environment:
       TZ: America/New_York  # Use your own timezone
-      PUID: "1000"  # Use your own PUID and PGID
-      PGID: "1000"
+      PUID: "1024"  # Use your own PUID and PGID
+      PGID: "100"
       CPU_CORES: "2"
       SLEEPTIME: "1m"
       MAKE_BACKUP: "N"
     restart: unless-stopped  
+

@@ -50,7 +50,8 @@ services:
     restart: unless-stopped  
 ```
 
-## 📂 Volumes
+## 📂 Folder Layout (example)  
+### Volumes
 ```
 /Temp
 /config
@@ -68,8 +69,6 @@ services:
     ├──batch-m4b-builder.sh
 ```
 
-
-
 ## 🔧 Build the image 
 ```bash
 docker compose build
@@ -79,17 +78,12 @@ docker compose build
 ```bash
 docker compose up -d
 ```
-
 ---
-
-
 # 🎧 Batch M4B Audiobook Builder
 
 This project simplifies the conversion of folders of MP3 files into chaptered `.m4b` audiobooks with embedded metadata and optional cover art. It runs inside a containerized environment for reliability and portability.
-
 ---
-
-## ⚙️ Main Script: `batch-m4b-builder.sh`
+## ⚙️ Main Script: `batch-m4b-builder.sh`  
 
 **Creates:**  
 - A single-track `.m4b` audiobook  
@@ -100,7 +94,6 @@ This project simplifies the conversion of folders of MP3 files into chaptered `.
 ### ✅ Requirements:
 - MP3 files named in chapter order 
 - Optional: `cover.jpg` in the same folder (if not mb4-tool will auto extract from mp3)
-
 
 ### 🖥️🏃 Usage (inside container)
 ```bash
@@ -143,7 +136,6 @@ docker exec -it auto-m4b-ubuntu /config/track-m4b-builder.sh
 
 ---
 
-
 ## 📦 `m4b-tool` (m4b-tool.phar)
 
 These are pre-installed in the Docker image.
@@ -172,7 +164,6 @@ Set up a structure like this
        └── output
 ```
 
-
 📦 Basic Merge
 
 ```bash
@@ -186,8 +177,9 @@ php m4b-tool.phar merge temp/input \
   --name "My Audiobook Title" \
   --author "Author Name" \
   --album "Audiobook Album" \
-  --cover cover.jpg
+  --cover cover.jpg  
 ```
+
 🔇 Automatically Generate Chapters by Silence
 ```bash
 php m4b-tool.phar merge temp/input \
@@ -216,9 +208,9 @@ php m4b-tool.phar help
 
 ---
 
-## 📬 Feedback
-Pull requests and improvements welcome!
-
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## 📬 Feedback
+Pull requests and improvements welcome!

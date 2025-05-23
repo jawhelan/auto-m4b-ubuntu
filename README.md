@@ -214,3 +214,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📬 Feedback
 Pull requests and improvements welcome!
+
+## ✅ Workflow Status 
+[![Build and Push Docker Image to Docker Hub](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml)
+

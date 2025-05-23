@@ -1,24 +1,23 @@
 
 # auto-m4b-ubuntu
 
-## 📦 Docker Image Available
 
-Pull the image from Docker Hub:
+[![Build and Push Docker Image to Docker Hub](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml)
 
-```bash
-docker pull jawhelan/auto-m4b-ubuntu
-```
-## 📄 Overview
+[![Docker Pulls](https://img.shields.io/docker/pulls/jawhelan/auto-m4b-ubuntu)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
+[![Docker Image Version](https://img.shields.io/docker/v/jawhelan/auto-m4b-ubuntu?sort=semver)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
+
+
 
 This project builds and runs a custom Docker container named auto-m4b-ubuntu, designed to convert MP3 audiobook files into .m4b format with embedded chapters and metadata, using the open-source tool m4b-tool. It is tailored for single-track M4B output with unified metadata.
 
 The environment is optimized for batch processing of audiobooks and can be extended or automated with wrapper scripts. It uses an Ubuntu-based image, preconfigured with:
 
-`m4b-tool` (m4b-tool.phar) (installed via PHP 8.2 .phar and/or apt)
+- `m4b-tool` (m4b-tool.phar) (installed via PHP 8.2 .phar and/or apt)
 
-`ffmpeg` for media processing
+- `ffmpeg` for media processing
 
-`eyeD3` for MP3 metadata extraction
+- `eyeD3` for MP3 metadata extraction
 
 ## 🐳 Docker Image Details
 **Base Image**: ubuntu:latest
@@ -71,12 +70,13 @@ services:
     ├── 0002 - Chapter Two.mp3
     ├── cover.jpg
 /config/
-    ├──batch-m4b-builder.sh  # optional to override container script 
+    ├──batch-m4b-builder.sh  # optional to override
 ```
 
-## 🔧 Build the image 
+## 📥 Pull the image from Docker:
+
 ```bash
-docker compose build
+docker pull jawhelan/auto-m4b-ubuntu
 ```
 
 ## 🚀 Launch container
@@ -96,7 +96,7 @@ This project simplifies the conversion of folders of MP3 files into chaptered `.
 - Proper metadata: title, artist, album, year, genre, comment  
 - A `.done` marker to prevent duplicate processing  
 
-### ✅ Requirements:
+### ✅ Operational Requirements:
 - MP3 files named in chapter order 
 - Optional: `cover.jpg` in the same folder (if not mb4-tool will auto extract from mp3)
 
@@ -133,6 +133,7 @@ docker exec -it auto-m4b-ubuntu bash
 ### ⚙️ `track-m4b-builder.sh` — Use “Track - Chapter” Style
 - Each MP3 becomes a separate chapter named like `001_Chapter_1`
 - Good for advanced players and debug
+
 
 ## 📝 Batch M4B Builder Notes
 
@@ -222,10 +223,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📬 Feedback
 Pull requests and improvements welcome!
-
-## ✅ Workflow Status 
-[![Build and Push Docker Image to Docker Hub](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml)
-
-[![Docker Pulls](https://img.shields.io/docker/pulls/jawhelan/auto-m4b-ubuntu)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
-[![Docker Image Version](https://img.shields.io/docker/v/jawhelan/auto-m4b-ubuntu?sort=semver)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
-

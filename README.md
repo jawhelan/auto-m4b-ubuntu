@@ -134,7 +134,6 @@ docker exec -it auto-m4b-ubuntu bash
 - Each MP3 becomes a separate chapter named like `001_Chapter_1`
 - Good for advanced players and debug
 
-
 ## 📝 Batch M4B Builder Notes
 
 - Each `.m4b` file includes:

@@ -1,6 +1,15 @@
 
 # auto-m4b-ubuntu
 
+## 📦 Docker Image Available
+
+Pull the image from Docker Hub:
+
+```bash
+docker pull jawhelan/auto-m4b-ubuntu
+```
+## 📄 Overview
+
 This project builds and runs a custom Docker container named auto-m4b-ubuntu, designed to convert MP3 audiobook files into .m4b format with embedded chapters and metadata, using the open-source tool m4b-tool. It is tailored for single-track M4B output with unified metadata.
 
 The environment is optimized for batch processing of audiobooks and can be extended or automated with wrapper scripts. It uses an Ubuntu-based image, preconfigured with:
@@ -217,4 +226,7 @@ Pull requests and improvements welcome!
 
 ## ✅ Workflow Status 
 [![Build and Push Docker Image to Docker Hub](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/jawhelan/auto-m4b-ubuntu/actions/workflows/docker-publish.yml)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/jawhelan/auto-m4b-ubuntu)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
+[![Docker Image Version](https://img.shields.io/docker/v/jawhelan/auto-m4b-ubuntu?sort=semver)](https://hub.docker.com/r/jawhelan/auto-m4b-ubuntu)
 

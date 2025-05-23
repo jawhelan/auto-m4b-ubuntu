@@ -33,4 +33,3 @@ jobs:
           context: .
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-

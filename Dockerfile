@@ -54,6 +54,10 @@ RUN curl -L https://github.com/sergiomb2/libmp4v2/archive/refs/heads/master.zip 
 COPY m4b-tool.phar /usr/local/bin/m4b-tool
 RUN chmod +x /usr/local/bin/m4b-tool
 
+# Add batch conversion script
+COPY config/batch-m4b-builder.sh /usr/local/bin/batch-m4b-builder.sh
+RUN chmod +x /usr/local/bin/batch-m4b-builder.sh
+
 # Optional bind volumes
 VOLUME /config
 VOLUME /temp
@@ -64,6 +68,6 @@ ENV PGID=""
 ENV CPU_CORES=""
 ENV SLEEPTIME=""
 
-LABEL Description="m4b-tool container with PHP 8.2 and libmp4v2 built from source"
+LABEL Description="m4b-tool container with PHP 8.2, libmp4v2, and embedded batch builder script"
 
 CMD ["sleep", "infinity"]

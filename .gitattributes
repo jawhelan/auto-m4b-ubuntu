@@ -1,2 +1,31 @@
-# Auto detect text files and perform LF normalization
+# Set default behavior to automatically normalize line endings
 * text=auto
+
+# Ensure shell scripts have LF line endings
+*.sh text eol=lf
+
+# Treat Markdown and config files as UTF-8 text
+*.md text
+*.yml text
+*.yaml text
+*.json text
+
+# Treat Docker files as text
+Dockerfile text
+*.dockerignore text
+
+# Make sure scripts always show in diff
+*.sh diff
+
+# Mark audio/media files as binary
+*.mp3 binary
+*.m4b binary
+
+# Prevent Git from diffing logs or audio
+*.log binary
+*.wav binary
+*.flac binary
+
+# If using Windows, you can uncomment this to prevent CRLF issues
+# *.sh text eol=lf
+

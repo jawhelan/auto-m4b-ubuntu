@@ -36,27 +36,23 @@ The environment is optimized for batch processing of audiobooks and can be exten
 
 ## 📝 `docker-compose.yml`
 ```yaml
-version: '3.7'  
+version: '3.7'
 
 services:
   auto-m4b-ubuntu:
-    build:
-      context: .
-      args:
-        TZ: America/New_York  # Use your own timezone
-    image: auto-m4b-ubuntu  
-    container_name: auto-m4b-ubuntu  
+    image: jawhelan/auto-m4b-ubuntu
+    container_name: auto-m4b-ubuntu
     volumes:
       - ./config:/config
       - ./temp:/temp
     environment:
       TZ: America/New_York  # Use your own timezone
-      PUID: "1000"  # Use your own PUID and PGID
-      PGID: "1000"
+      PUID: "1024"  # Use your own PUID and PGID
+      PGID: "100"
       CPU_CORES: "2"
       SLEEPTIME: "1m"
       MAKE_BACKUP: "N"
-    restart: unless-stopped  
+    restart: unless-stopped 
 ```
 
 ## 📂 Folder Layout (example)  
@@ -75,7 +71,7 @@ services:
     ├── 0002 - Chapter Two.mp3
     ├── cover.jpg
 /config/
-    ├──batch-m4b-builder.sh
+    ├──batch-m4b-builder.sh  # optional to override container script 
 ```
 
 ## 🔧 Build the image 
@@ -104,11 +100,22 @@ This project simplifies the conversion of folders of MP3 files into chaptered `.
 - MP3 files named in chapter order 
 - Optional: `cover.jpg` in the same folder (if not mb4-tool will auto extract from mp3)
 
-### 🖥️🏃 Usage (inside container)
+### 🖥️🏃 Usage (from host)
+```bash
+docker exec auto-m4b-ubuntu /usr/local/bin/batch-m4b-builder.sh
+```
+- optional for override
 ```bash
 docker exec -it auto-m4b-ubuntu /config/batch-m4b-builder.sh
 ```
-### 🐚🏃 Usage (inside container)
+### 🐚🏃 Usage (from container)
+
+```bash
+docker exec -it auto-m4b-ubuntu bash  
+/usr/local/bin/batch-m4b-builder.sh
+```
+
+- optional for override
 ```bash
 docker exec -it auto-m4b-ubuntu bash  
 /config/batch-m4b-builder.sh
@@ -121,19 +128,12 @@ docker exec -it auto-m4b-ubuntu bash
 - Chapters are named from the full filename
 - Suitable for podcasts or complex filenames
 
-```bash
-docker exec -it auto-m4b-ubuntu /config/file-m4b-builder.sh
-```
-
 ---
 
 ### ⚙️ `track-m4b-builder.sh` — Use “Track - Chapter” Style
 - Each MP3 becomes a separate chapter named like `001_Chapter_1`
 - Good for advanced players and debug
 
-```bash
-docker exec -it auto-m4b-ubuntu /config/track-m4b-builder.sh
-```
 
 ## 📝 Batch M4B Builder Notes
 

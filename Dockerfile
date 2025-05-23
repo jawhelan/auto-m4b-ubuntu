@@ -54,9 +54,13 @@ RUN curl -L https://github.com/sergiomb2/libmp4v2/archive/refs/heads/master.zip 
 COPY m4b-tool.phar /usr/local/bin/m4b-tool
 RUN chmod +x /usr/local/bin/m4b-tool
 
-# Add batch conversion script
+# Add batch conversion scripts
 COPY config/batch-m4b-builder.sh /usr/local/bin/batch-m4b-builder.sh
+COPY config/file-m4b-builder.sh /usr/local/bin/file-m4b-builder.sh
+COPY config/track-m4b-builder.sh /usr/local/bin/track-m4b-builder.sh
 RUN chmod +x /usr/local/bin/batch-m4b-builder.sh
+RUN chmod +x /usr/local/bin/file-m4b-builder.sh
+RUN chmod +x /usr/local/bin/track-m4b-builder.sh
 
 # Optional bind volumes
 VOLUME /config
